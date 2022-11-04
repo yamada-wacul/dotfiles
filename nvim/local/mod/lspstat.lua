@@ -1,0 +1,6 @@
+vim.keymap.set("n", "<leader>lS", function()
+    require("local.mod.lspstat").show_all()
+end, { noremap = true, silent = true, desc = "show LSP status" })
+vim.api.nvim_create_user_command("LspStat", function()
+    require("local.mod.lspstat").show_all()
+end, { force = true, desc = "show LSP status" })

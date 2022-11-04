@@ -1,0 +1,97 @@
+#!env bash
+
+# setup deb repositories
+sudo apt update
+sudo apt install -y curl
+#  - for GitHub CLI
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+	&& sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+	&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+#  - for Google Cloud CLI
+echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+#  - update repositories
+sudo apt update
+
+# upgrade
+sudo apt upgrade
+
+# libraries
+sudo apt install -y \
+    build-essential libssl-dev \
+    zlib1g-dev libreadline-dev libsqlite3-dev \
+	libbz2-dev libffi-dev liblzma-dev
+
+# compile/build
+sudo apt install -y \
+	autoconf automake bison fakeroot flex gcc gettext cmake make ninja-build
+
+# request & certification
+sudo apt install -y \
+	httpie wget ssh \
+	apt-transport-https ca-certificates gnupg
+
+# utility
+sudo apt install -y \
+	bash binutils coreutils diffutils findutils patch sed \
+	zsh zsh-syntax-highlighting \
+	inotify-tools unzip jq man-db direnv ripgrep
+
+# development
+sudo apt install -y \
+	git tig \
+	sqlite3 sqlite3-doc sqlite3-pcre \
+	python3 python-is-python3 python3-pip luarocks lua5.3 luajit \
+	docker docker-compose \
+	aws-cli google-cloud-cli
+
+# neovim
+sudo apt install -y luajit libluajit-5.1-dev cmake ninja-build gettext
+nvim_tmpdir="$(mktemp -d)"
+trap "rm -rf $nvim_tmpdir" EXIT
+git clone --depth 1 -b nightly https://github.com/neovim/neovim "$nvim_tmpdir/neovim"
+pushd "$nvim_tmpdir/neovim"
+make CMAKE_BUILD_TYPE=Release
+sudo make install
+popd
+
+# asdf
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2
+
+# deno
+curl -fsSL https://deno.land/install.sh | sh
+
+# go
+curl -fSLo go1.19.3.linux-amd64.tar.gz https://go.dev/dl/go1.19.3.linux-amd64.tar.gz
+sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.19.3.linux-amd64.tar.gz
+
+# yarn
+sudo corepack enable
+
+# nodejs
+asdf plugin add nodejs
+asdf install nodejs latest
+asdf global nodejs latest
+
+# gogh
+go install github.com/kyoh86/gogh/v2/cmd/gogh@latest
+
+# GitHub CLI
+sudo apt install -y gh
+gh auth login
+
+# delta
+delta_tmpdir="$(mktemp -d)"
+trap "rm -rf $delta_tmpdir" EXIT
+gh release download -R dandavison/delta -p '*-x86_64-unknown-linux-musl*' -O - | tar -xvz -C "$delta_tmpdir"
+mv "$delta_tmpdir/delta-*/delta" "$HOME/.local/bin"
+
+# change shell
+chsh -s "$(which zsh)"
+if [[ "$ZDOTDIR" != "$HOME/.config/zsh" ]]; then
+    echo "\nif [[ -d \$HOME/.config ]]; then; export ZDOTDIR=\$HOME/.config/zsh; fi" | sudo tee -a /etc/zsh/zshenv
+fi
+
+# change locale
+sudo apt install -y language-pack-ja
+sudo update-locale LANG=ja_JP.UTF8
