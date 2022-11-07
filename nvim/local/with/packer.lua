@@ -125,8 +125,18 @@ packer.startup(function(use)
     use({
         "petertriho/nvim-scrollbar",
         config = function()
-            require("scrollbar").setup()
             require("scrollbar.handlers.search").setup()
+            require("scrollbar").setup({
+                marks = {
+                    Search = {
+                        color = vim.g.momiji_colors.lightblue,
+                        highlight = "IncSearch",
+                    },
+                },
+                handlers = {
+                    search = true,
+                },
+            })
         end,
     })
 
