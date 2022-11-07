@@ -114,6 +114,21 @@ packer.startup(function(use)
 
     use("lambdalisue/readablefold.vim")
     use("rbtnn/vim-ambiwidth")
+    use({
+        "nvim-treesitter/nvim-treesitter-context",
+        config = function()
+            require('treesitter-context').setup({
+                enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+            })
+        end,
+    })
+    use({
+        "petertriho/nvim-scrollbar",
+        config = function()
+            require("scrollbar").setup()
+            require("scrollbar.handlers.search").setup()
+        end,
+    })
 
     -- Status                  ==================================================
 
