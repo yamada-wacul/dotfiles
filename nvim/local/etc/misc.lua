@@ -37,7 +37,6 @@ vim.cmd([[
 
 -- 検索結果ハイライトの消去
 vim.keymap.set("n", "<C-l>", "<cmd>nohlsearch<cr><C-l>", {
-    noremap = true,
     desc = "Clear highlighting of the searched words (nohlsearch)"
 })
 

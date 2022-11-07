@@ -413,6 +413,29 @@ packer.startup(function(use)
         end,
     })
 
+    use({ "kevinhwang91/nvim-hlslens",
+        config = function()
+            require('hlslens').setup()
+
+            local kopts = { noremap = true, silent = true }
+
+            vim.api.nvim_set_keymap('n', 'n',
+                [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], kopts)
+            vim.api.nvim_set_keymap('n', 'N',
+                [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], kopts)
+            vim.api.nvim_set_keymap('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+            vim.api.nvim_set_keymap('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+            vim.api.nvim_set_keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+            vim.api.nvim_set_keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+            vim.api.nvim_set_keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+            vim.keymap.set("n", "<C-l>", "<cmd>nohlsearch<cr><cmd>lua require('hlslens').stop()<cr><C-l>", {
+                noremap = true,
+                desc = "Clear highlighting of the searched words (nohlsearch) with hlslens flow window"
+            })
+
+        end
+    })
+
     use({
         "thinca/vim-qfreplace",
         cmd = "Qfreplace",
