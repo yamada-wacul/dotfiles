@@ -12,6 +12,7 @@ function update {
         update_go
         update_yarn
         update_brew
+        update_apt
         update_gordon
         update_asdf
         echo done
@@ -53,6 +54,17 @@ function update_brew {
     pushd ~
     if command -v brew >/dev/null 2>&1; then
         brew upgrade --fetch-HEAD
+    fi
+    popd
+}
+# }}}
+
+# update apt {{{
+function update_apt {
+    echo updating apt
+    pushd ~
+    if command -v apt >/dev/null 2>&1; then
+        sudo apt update && sudo apt upgrade
     fi
     popd
 }
