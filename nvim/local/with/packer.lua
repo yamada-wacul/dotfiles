@@ -43,9 +43,11 @@ vim.api.nvim_create_user_command("UpdateAll", update_all, { force = true })
 
 -- startup =========================================================================
 
-packer.init({
-    max_jobs = 60,
-})
+local packer_option = {}
+if vim.fn.has("mac") then
+    packer_option["max_jobs"] = 60
+end
+packer.init(packer_option)
 packer.startup(function(use)
     use({ "wbthomason/packer.nvim", opt = true })
 
@@ -313,8 +315,13 @@ packer.startup(function(use)
     })
 
     use({
-        "kana/vim-operator-user",
-        "kana/vim-operator-replace",
+        {
+            "kana/vim-operator-replace",
+            config = function()
+                vim.keymap.set('', '_', '<Plug>(operator-replace)', {})
+            end,
+            requires = { "kana/vim-operator-user" },
+        },
         {
             "osyo-manga/vim-operator-jump_side",
             requires = { "kana/vim-operator-user" },
