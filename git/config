@@ -84,8 +84,6 @@
 
 [credential]
 	helper = /mnt/c/Program\\ Files/Git/mingw64/bin/git-credential-manager-core.exe
-[alias]
-	copy = !/mnt/c/yamada/scoop/shims/win32yank.exe -i
 
 ;; user identity ==============================================================
 
