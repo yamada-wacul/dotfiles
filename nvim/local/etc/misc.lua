@@ -12,18 +12,21 @@ vim.opt.grepprg = "rg --vimgrep --no-heading"
 vim.opt.grepformat = "%f:%l:%c:%m,%f:%l:%m"
 
 vim.opt.clipboard = "unnamedplus,unnamed"
-vim.g.clipboard = {
-    name = 'wsl',
-    copy = {
-        ['+'] = 'win32yank.exe -i --crlf',
-        ['*'] = 'win32yank.exe -i --crlf',
-    },
-    paste = {
-        ['+'] = 'win32yank.exe -o --lf',
-        ['*'] = 'win32yank.exe -o --lf',
-    },
-    cache_enabled = 1,
-}
+
+if vim.fn.executable('win32yank.exe') then
+    vim.g.clipboard = {
+        name = 'win32yank-wsl',
+        copy = {
+            ['+'] = 'win32yank.exe -i --crlf',
+            ['*'] = 'win32yank.exe -i --crlf',
+        },
+        paste = {
+            ['+'] = 'win32yank.exe -o --lf',
+            ['*'] = 'win32yank.exe -o --lf',
+        },
+        cache_enabled = 0,
+    }
+end
 
 vim.opt.hidden = true -- Enable to edit without saving
 

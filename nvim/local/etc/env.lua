@@ -107,8 +107,15 @@ end
 push_path(home .. "/.cargo/bin")
 
 -- ASDF:
+push_path(home .. "/.asdf/bin")
 vim.env.ASDF_DATA_DIR = data_home .. "/asdf"
 push_path(vim.env.ASDF_DATA_DIR .. "/shims")
+
+-- Deno:
+push_path(home .. "/.deno/bin")
+
+-- Tig:
+push_path(dotfiles .. "/tig/clip")
 
 -- .local/bin
 push_path(home .. "/.local/bin")

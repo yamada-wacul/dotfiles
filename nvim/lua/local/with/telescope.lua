@@ -55,8 +55,8 @@ telescope.setup({
 })
 
 -- Keymaps =================================================================================
-local setmap = function(modes, lhr, rhr, desc)
-    vim.keymap.set(modes, lhr, rhr, { noremap = true, silent = true, desc = desc })
+local setmap = function(modes, lhs, rhs, desc)
+    vim.keymap.set(modes, lhs, rhs, { noremap = true, silent = true, desc = desc })
 end
 
 setmap("n", "<leader>ff", function() require("telescope.builtin").find_files() end, "find files with Telescope")

@@ -15,6 +15,9 @@ vim.opt.autoindent = true
 
 vim.opt.wrap = false
 vim.opt.textwidth = 0 -- never limit length of each line
+vim.keymap.set({ 'o', 'x' }, [[a']], [[2i']], { noremap = true })
+vim.keymap.set({ 'o', 'x' }, [[a"]], [[2i"]], { noremap = true })
+vim.keymap.set({ 'o', 'x' }, [[a`]], [[2i`]], { noremap = true })
 
 vim.opt.ambiwidth = "single"
 vim.opt.emoji = true -- Show emoji characters
