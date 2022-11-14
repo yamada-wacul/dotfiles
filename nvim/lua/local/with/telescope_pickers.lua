@@ -2,7 +2,6 @@ local pickers = require("telescope.pickers")
 local builtin = require("telescope.builtin")
 local finders = require("telescope.finders")
 local make_entry = require("telescope.make_entry")
-local utils = require("telescope.utils")
 local conf = require("telescope.config").values
 local actions = require("telescope.actions")
 
@@ -11,7 +10,8 @@ local my_pickers = {}
 
 my_pickers.git_recent = function(o)
     local opts = o or {}
-    local depth = utils.get_default(opts.depth, 5)
+
+    local depth = vim.F.if_nil(opts.depth, 5)
 
     if opts.cwd then
         opts.cwd = vim.fn.expand(opts.cwd)
