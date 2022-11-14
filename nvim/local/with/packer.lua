@@ -31,12 +31,19 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 -- update (with shell) =============================================================
 
 local function update_all()
+    local g = vim.api.nvim_create_augroup("update-all-after-packer-sync", { clear = true })
+    vim.api.nvim_create_autocmd("User", {
+        group = g,
+        pattern = "PackerComplete",
+        callback = function()
+            require("local.mod.volaterm").split(0, "topleft", {
+                exec = vim.o.shell .. ' -c "source ' .. vim.env.ZDOTDIR .. '/.zshrc && update"',
+            })
+        end,
+        desc = "Run update-all on zsh after packer.sync()",
+        once = true,
+    })
     packer.sync()
-    vim.defer_fn(function()
-        require("local.mod.volaterm").split(0, "topleft", {
-            exec = vim.o.shell .. ' -c "source ' .. vim.env.ZDOTDIR .. '/.zshrc && update"',
-        })
-    end, 5000)
 end
 
 vim.api.nvim_create_user_command("UpdateAll", update_all, { force = true })
@@ -207,6 +214,20 @@ packer.startup(function(use)
     use({
         "williamboman/mason.nvim",
         "williamboman/mason-lspconfig.nvim",
+        {
+            "RubixDev/mason-update-all",
+            config = function()
+                local g = vim.api.nvim_create_augroup("update-mason-after-packer-sync", { clear = true })
+                vim.api.nvim_create_autocmd("User", {
+                    group = g,
+                    pattern = "PackerComplete",
+                    callback = function()
+                        require('mason-update-all').update_all()
+                    end,
+                    desc = "Run mason-update-all after packer.sync()",
+                })
+            end,
+        },
         "b0o/schemastore.nvim",
         {
             "neovim/nvim-lspconfig",
